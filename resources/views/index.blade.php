@@ -64,7 +64,7 @@
                 <tr>
                     <td>Key</td>
                     <td>
-                        <input class="form-control" v-model="editForm.keyname">
+                        <input class="form-control" v-model="editForm.keyname" readonly>
                     </td>
                 </tr>
                 <tr>
@@ -88,7 +88,12 @@
                 <h5 class="pull-left col-sm-10"><i class="fa fa-filter" aria-hidden="true"></i> Redis Content Filter</h5>
                 <div class="pull-right col-sm-2 input-group">
                     <span class="input-group-addon"><i class="fa fa-database" aria-hidden="true"></i> Database</span>
-                    <input class="form-control text-center" v-model="database">
+                    {{--<input class="form-control text-center" v-model="database">--}}
+                    <div class="input">
+                        <select class="form-control" v-model="database">
+                            <option v-for="connection in availableDatabase">@{{ connection }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
@@ -128,59 +133,40 @@
             </div>
         </div>
 
-        <table class="result table table-striped table-bordered col-sm-12">
-            <thead>
-                <tr>
-                    <th class="col-sm-4">Key</th>
-                    <th>Content</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3" class="text-center" v-if="rows.length == 0">No records found</td>
-                </tr>
-                <tr v-for="row in rows">
-                    <td class="col-sm-4">@{{ row.key }}</td>
-                    <td>@{{ row.content }}</td>
-                    <td class="col-sm-2 text-center">
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-warning" v-on:click="updateConfim(row.key, row.content)">Edit</button>
-                            <button class="btn btn-danger" v-on:click="deleteConfirm(row.key)">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table class="result table table-striped table-bordered col-sm-12">
+                <thead>
+                    <tr>
+                        <th class="col-sm-4">Key</th>
+                        <th>Content</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="text-center" v-if="rows.length == 0">No records found</td>
+                    </tr>
+                    <tr v-for="row in rows">
+                        <td class="col-sm-4">@{{ row.key }}</td>
+                        <td>@{{ row.content }}</td>
+                        <td class="col-sm-2 text-center">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-warning" v-on:click="updateConfim(row.key, row.content)">Edit</button>
+                                <button class="btn btn-danger" v-on:click="deleteConfirm(row.key)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 @endsection
 
 @section('header-scripts')
-    <style>
-        body {background-color: #484848;}
-        .panel-heading,
-        .panel-body,
-        .panel-footer {
-            overflow: hidden;
-        }
-        #dashboard {margin-top: 50px; margin-left: auto; margin-right: auto;}
-        .result.table {word-break: break-all; background-color: #fff;}
-        .panel-footer .add-new {margin-right: 20px;}
-        .fa-database {margin-right: 15px;}
-        .fa-filter {margin-right: 15px;}
-        .fa-chevron-right {margin-left: 10px;}
-        .fa-chevron-left {margin-right: 10px;}
-
-        #hover-mask {position: absolute; width: 100%; height: 100%; z-index: 5; opacity: 0.5; background-color: #333;}
-        #create-form,
-        #edit-form,
-        #message-box {position: fixed; z-index:6; width: 350px; left: 50%; margin-left: -175px; top: 10%;}
-        #message-box {z-index:7; width: 400px; margin-left: -200px;}
-    </style>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
+    <link href="{{ asset('css/redis-ui-dashboard.css') }}" rel="stylesheet"/>
 @endsection
 
 @section('footer-script')
@@ -209,9 +195,22 @@
                 addPostUrl: "{{ url('redis-ui/api/create') }}",
                 editForm: [],
                 editPostUrl: "{{ url('redis-ui/api/edit') }}",
+                availableDatabase: [
+                    'cache',
+                    'default'
+                ],
             },
             created: function(){
                 this.searchNow();
+            },
+            watch: {
+                database: function () {
+                    this.filters = {
+                        key: "",
+                        content: ""
+                    };
+                    this.searchNow();
+                }
             },
             methods: {
                 resetFilters: function () {

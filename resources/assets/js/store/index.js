@@ -15,29 +15,43 @@ const store = new Vuex.Store({
         currentAction: null,
         createForm: [],
         editForm: [],
+        actionMessage: null,
+        maskon: false,
     },
     action: {
 
     },
     mutations: {
-        SET_RESULT_ROWS: (state, { list }) => {
+        SET_RESULT_ROWS: (state, list) => {
             state.rows = list;
         },
-        SET_CREATE_FORM: (state, { value }) => {
+        SET_CREATE_FORM: (state, value) => {
             state.createForm = value;
         },
-        SET_EDIT_FORM: (state, { value }) => {
+        SET_EDIT_FORM: (state, value) => {
             state.editForm = value;
         },
-        SET_CURRENT_ACTION: (state, { value }) => {
+        SET_CURRENT_ACTION: (state, value) => {
             state.currentAction = value;
         },
-        SET_TARGET_KEYNAME: (state, { value }) => {
+        SET_TARGET_KEYNAME: (state, value) => {
             state.targetKeyname = value;
         },
-        SET_MESSAGE_TYPE: (state, { value }) => {
+        SET_MESSAGE_TYPE: (state, value) => {
             state.messageType = value;
         },
+        SET_ACTION_MESSAGE: (state, value) => {
+            state.actionMessage = value;
+        },
+        SET_MASK_ON: (state, value) => {
+            state.maskon = value;
+        },
+        closePopUpBox: () => {
+            state.maskon = false;
+            state.currentAction = null;
+            state.actionMessage = null;
+            state.targetKeyname = null;
+        }
     },
     getters: {
         GET_RESULT_ROWS: state => {
@@ -57,6 +71,12 @@ const store = new Vuex.Store({
         },
         GET_MESSAGE_TYPE: state => {
             return state.messageType;
+        },
+        GET_ACTION_MESSAGE: state => {
+            return state.actionMessage;
+        },
+        GET_MASK_ON: state => {
+            return state.maskon;
         },
     }
 });

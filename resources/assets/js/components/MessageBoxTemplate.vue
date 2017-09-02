@@ -12,7 +12,7 @@
                 Ding!
             </div>
             <div class="panel-body">
-                <p>@{{ actionMessage  }}</p>
+                <p>{{ actionMessage  }}</p>
             </div>
             <div class="panel-footer">
                 <div class="btn-group pull-right">
@@ -25,7 +25,46 @@
 </template>
 
 <script>
-    export default {
+    import { mapState } from 'vuex'
+    import store from '../../redis-ui/store'
 
+    export default {
+        data: function() {
+            return {
+                deletePostUrl: "/redis-ui/api/delete/",
+            };
+        },
+        computed: mapState({
+            actionMessage: state => state.actionMessage,
+            maskon: state => state.maskon,
+            targetKeyname: state => state.targetKeyname,
+            currentAction: state => state.currentAction,
+            messageType: state => state.messageType,
+        }),
+        methods: {
+            deleteConfirm: function(keyname) {
+                this.messageType = 'confirming';
+                this.actionMessage = 'Are you sure you want to remove '+keyname+'?';
+                this.maskon = true;
+                this.currentAction = 'delete';
+                this.targetKeyname = keyname;
+            },
+            deleteRecord: function(keyname) {
+                axios.post(this.deletePostUrl, {
+                    keyname: keyname
+                }).then((response) => {
+                    if (response.data.success) {
+                        this.messageType = 'success';
+                        this.actionMessage = 'Key ('+keyname+') has been removed successfully.';
+                        this.maskon = true;
+                        this.searchNow();
+                    } else {
+                        this.messageType = 'error';
+                        this.actionMessage ='Failed to remove key ('+keyname+')';
+                        this.maskon = true;
+                    }
+                });
+            },
+        }
     }
 </script>

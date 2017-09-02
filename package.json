@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
+  "devDependencies": {
+   "gulp": "^3.9.1",
+    "vue": "^2.0.1",
+    "vue-resource": "^1.0.3"
+  },
+  "dependencies": {
+    "vuex": "^2.4.0"
+  }
+}

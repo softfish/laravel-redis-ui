@@ -5,7 +5,7 @@
             <div class="pull-right col-sm-2 input-group">
                 <span class="input-group-addon"><i class="fa fa-database" aria-hidden="true"></i> Database</span>
                 <select v-model="database">
-                    <option v-for="connection in availableDatabase">@{{ connection }}</option>
+                    <option v-for="connection in availableDatabase">{{ connection }}</option>
                 </select>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     <button class="btn btn-default" v-on:click="goBack()" :disabled="currentPage === 0">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
                     </button>
-                    <div class="btn">Page @{{ currentPage + 1 }}</div>
+                    <div class="btn">Page {{ currentPage + 1 }}</div>
                     <button class="btn btn-default" v-on:click="goNext()" :disabled="rows.length < offset">
                         Next Page <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
@@ -48,82 +48,97 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import store from '../../redis-ui/store'
+
     export default {
-        data: {
-            filters: {
-                key: "",
-                content: ""
-            },
-            filterPostUrl: "{{ url('redis-ui/api/filters') }}",
-            currentPage: 0,
-            previousPage: 0,
-            nextPage: 1,
-            offset: 20,
-            database: "cache",
-            availableDatabase: [
-                'cache',
-                'default'
-            ],
-            watch: {
-                database: function () {
-                    this.filters = {
-                        key: "",
+        data: function() {
+            return {
+                filters: {
+                    key: "",
                         content: ""
-                    };
+                },
+                filterPostUrl: "/redis-ui/api/filters",
+                    currentPage: 0,
+                previousPage: 0,
+                nextPage: 1,
+                offset: 20,
+                database: "cache",
+                availableDatabase: [
+                    'cache',
+                    'default'
+                ],
+            };
+        },
+        created: function() {
+            this.searchNow();
+        },
+        computed: mapState ({
+            rows: state => state.rows,
+        }),
+        watch: {
+            database: function () {
+                this.filters = {
+                    key: "",
+                    content: ""
+                };
+                this.searchNow();
+            }
+        },
+        methods: {
+            showCreateForm: function(){
+                store.commit('SET_CURRENT_ACTION', 'create');
+                store.commit('SET_MASK_ON', true);
+            },
+            resetFilters: function () {
+                this.filters = {
+                    key: "",
+                    content: ""
+                };
+                this.currentPage = 0;
+                this.previousPage = 0;
+                this.nextPage = 1;
+
+                this.searchNow();
+            },
+            newSearch: function() {
+                this.currentPage = 0;
+                this.previousPage = 0;
+                this.nextPage = 1;
+                this.searchNow();
+            },
+            searchNow: function() {
+                axios.post(this.filterPostUrl, {
+                    'filters': this.filters,
+                    'currentPage': this.currentPage,
+                    'previsouPage': this.previsouPage,
+                    'nextPage': this.nextPage,
+                    'offset': this.offset,
+                    'database': this.database,
+                })
+                .then( (response) => {
+                    response = response.data;
+                    if (response.success) {
+                        store.commit('SET_RESULT_ROWS', response.data);
+                    } else {
+                        this.rows = [];
+                    }
+                });
+            },
+            goNext: function() {
+                if (this.rows.length <= this.offset) {
+                    this.currentPage ++;
+                    this.nextPage ++;
                     this.searchNow();
                 }
             },
-            methods: {
-                resetFilters: function () {
-                    this.filters = {
-                        key: "",
-                        content: ""
-                    };
-                    this.currentPage = 0;
-                    this.previousPage = 0;
-                    this.nextPage = 1;
-
+            goBack:function() {
+                if (this.currentPage > 0) {
+                    this.currentPage --;
+                    this.nextPage --;
                     this.searchNow();
-                },
-                newSearch: function() {
-                    this.currentPage = 0;
-                    this.previousPage = 0;
-                    this.nextPage = 1;
-                    this.searchNow();
-                },
-                searchNow: function() {
-                    axios.post(this.filterPostUrl, {
-                        'filters': this.filters,
-                        'currentPage': this.currentPage,
-                        'previsouPage': this.previsouPage,
-                        'nextPage': this.nextPage,
-                        'offset': this.offset,
-                        'database': this.database,
-                    })
-                    .then( (response) => {
-                        response = response.data;
-                        if (response.success) {
-                            this.rows = response.data;
-                        } else {
-                            this.rows = [];
-                        }
-                    });
-                },
-                goNext: function() {
-                    if (this.rows.length <= this.offset) {
-                        this.currentPage ++;
-                        this.nextPage ++;
-                        this.searchNow();
-                    }
-                },
-                goBack:function() {
-                    if (this.currentPage > 0) {
-                        this.currentPage --;
-                        this.nextPage --;
-                        this.searchNow();
-                    }
-                },
-            }
+                }
+            },
         }
     }
 </script>

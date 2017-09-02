@@ -29,10 +29,22 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import store from '../../redis-ui/store'
+
     export default {
-        data: {
-            editPostUrl: "{{ url('redis-ui/api/edit') }}",
+        data: function() {
+            return {
+                editPostUrl: "/redis-ui/api/edit",
+            };
         },
+        computed: mapState({
+            editForm: state => state.editForm,
+            maskon: state => state.maskon,
+            currentAction: state => state.currentAction,
+            actionMessage: state => state.actionMessage,
+            messageType: state => state.messageType,
+        }),
         methods: {
             updateConfim: function(keyname, value) {
                 this.currentAction = 'edit';

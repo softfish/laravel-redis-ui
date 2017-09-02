@@ -1,5 +1,5 @@
 <template>
-    <div id="create-form" v-if="(maskon && currentAction === 'create')">
+    <div id="create-form">
         <div class="panel panel-success">
             <div class="panel-heading">Create a new Redis Data</div>
             <div class="panel-body">
@@ -29,15 +29,23 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import store from '../../redis-ui/store'
+
     export default {
-        data: {
-            addPostUrl: "{{ url('redis-ui/api/create') }}",
+        data: function() {
+            return {
+                addPostUrl: "/redis-ui/api/create",
+            };
         },
+        computed: mapState({
+            createForm: state => state.createForm,
+            maskon: state => state.maskon,
+            currentAction: state => state.currentAction,
+            actionMessage: state => state.actionMessage,
+            messageType: state => state.messageType,
+        }),
         methods: {
-            showCreateForm: function(){
-                this.currentAction = 'create';
-                this.maskon = true;
-            },
             addRecord: function(keyname, value) {
                 axios.post(this.addPostUrl, {
                     keyname: keyname,
@@ -45,13 +53,13 @@
                 }).then((response) => {
                     response = response.data;
                     if (response.success) {
-                        this.messageType = 'info';
-                        this.actionMessage = 'New record created successfully!';
-                        this.createForm = [];
+                        store.commit('SET_MESSAGE_TYPE', 'info')
+                        store.commit('SET_ACTION_MESSAGE', 'New record created successfully!');
+                        store.commit('SET_CREATE_FORM', []);
                         this.searchNow();
                     } else {
-                        this.messageType = 'error';
-                        this.actionMessage = 'Failed to create new record!';
+                        store.commit('SET_MESSAGE_TYPE', 'error')
+                        store.commit('SET_ACTION_MESSAGE', 'Failed to create new record!');
                     }
                 });
             },

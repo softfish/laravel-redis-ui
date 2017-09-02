@@ -14,14 +14,7 @@ class UIController extends Controller
      */
     public function index()
     {
-        $redis = Redis::connection('cache');
-
-        if (!empty($redis)) {
-            return view('redis-ui::index');
-        } else {
-            Flash::error('Redis connection failed!');
-            return view('redis-ui::oops');
-        }
+        return view('redis-ui::index-v2');
     }
 
     /**

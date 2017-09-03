@@ -21,7 +21,7 @@
             <div class="panel-footer">
                 <div class="btn-group pull-right">
                     <button class="btn btn-primary" v-on:click="editRecord(editForm.keyname, editForm.content)">Update</button>
-                    <button class="btn btn-default" v-on:click="closePopUpBox()">X Close</button>
+                    <button class="btn btn-default" v-on:click="closeEditForm()">X Close</button>
                 </div>
             </div>
         </div>
@@ -46,14 +46,6 @@
             messageType: state => state.messageType,
         }),
         methods: {
-            updateConfim: function(keyname, value) {
-                this.currentAction = 'edit';
-                this.maskon = true;
-                this.editForm = {
-                    keyname: keyname,
-                    content: value
-                };
-            },
             editRecord: function(keyname, newValue) {
                 axios.post(this.editPostUrl, {
                     keyname: keyname,
@@ -61,15 +53,18 @@
                 }).then((response) => {
                     response = response.data;
                     if (response.success) {
-                        this.messageType = 'info';
-                        this.actionMessage = 'Record has been updated successfully!';
-                        this.createForm = [];
-                        this.searchNow();
+                        store.commit('SET_MESSAGE_TYPE', 'info');
+                        store.commit('SET_ACTION_MESSAGE', 'Record has been updated successfully!');
+                        store.commit('SET_CREATE_FORM', []);
+                        store.commit('searchNow');
                     } else {
-                        this.messageType = 'error';
-                        this.actionMessage = 'Failed to update the record!';
+                        store.commit('SET_MESSAGE_TYPE', 'error');
+                        store.commit('SET_ACTION_MESSAGE', 'Failed to update the record!');
                     }
                 });
+            },
+            closeEditForm: function() {
+                store.commit('closePopUpBox');
             },
         }
     }

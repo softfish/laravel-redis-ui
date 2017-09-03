@@ -28,7 +28,7 @@
                         <td>@{{ row.content }}</td>
                         <td class="col-sm-2 text-center">
                             <div class="btn-group btn-group-sm">
-                                <button class="btn btn-warning" v-on:click="updateConfim(row.key, row.content)">Edit</button>
+                                <button class="btn btn-warning" v-on:click="updateConfirm(row.key, row.content)">Edit</button>
                                 <button class="btn btn-danger" v-on:click="deleteConfirm(row.key)">Delete</button>
                             </div>
                         </td>

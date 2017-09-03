@@ -21,7 +21,7 @@
             <div class="panel-footer">
                 <div class="btn-group pull-right">
                     <button class="btn btn-primary" v-on:click="addRecord(createForm.keyname, createForm.content)">Submit</button>
-                    <button class="btn btn-default" v-on:click="closePopUpBox()">X Close</button>
+                    <button class="btn btn-default" v-on:click="closeCreateForm()">X Close</button>
                 </div>
             </div>
         </div>
@@ -56,13 +56,16 @@
                         store.commit('SET_MESSAGE_TYPE', 'info')
                         store.commit('SET_ACTION_MESSAGE', 'New record created successfully!');
                         store.commit('SET_CREATE_FORM', []);
-                        this.searchNow();
+                        store.commit('searchNow');
                     } else {
                         store.commit('SET_MESSAGE_TYPE', 'error')
                         store.commit('SET_ACTION_MESSAGE', 'Failed to create new record!');
                     }
                 });
             },
+            closeCreateForm: function(){
+                store.commit('closePopUpBox');
+            }
         }
     }
 </script>

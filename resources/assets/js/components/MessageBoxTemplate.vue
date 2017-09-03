@@ -42,29 +42,25 @@
             messageType: state => state.messageType,
         }),
         methods: {
-            deleteConfirm: function(keyname) {
-                this.messageType = 'confirming';
-                this.actionMessage = 'Are you sure you want to remove '+keyname+'?';
-                this.maskon = true;
-                this.currentAction = 'delete';
-                this.targetKeyname = keyname;
-            },
             deleteRecord: function(keyname) {
                 axios.post(this.deletePostUrl, {
                     keyname: keyname
                 }).then((response) => {
                     if (response.data.success) {
-                        this.messageType = 'success';
-                        this.actionMessage = 'Key ('+keyname+') has been removed successfully.';
-                        this.maskon = true;
-                        this.searchNow();
+                        store.commit('SET_MESSAGE_TYPE', 'success');
+                        store.commit('SET_ACTION_MESSAGE', 'Key ('+keyname+') has been removed successfully.');
+                        store.commit('SET_MASK_ON', true);
+                        store.commit('searchNow');
                     } else {
-                        this.messageType = 'error';
-                        this.actionMessage ='Failed to remove key ('+keyname+')';
-                        this.maskon = true;
+                        store.commit('SET_MESSAGE_TYPE', 'error');
+                        store.commit('SET_ACTION_MESSAGE', 'Failed to remove key ('+keyname+')');
+                        store.commit('SET_MASK_ON', true);
                     }
                 });
             },
+            closeMessageBox: function() {
+                store.commit('closePopUpBox');
+            }
         }
     }
 </script>

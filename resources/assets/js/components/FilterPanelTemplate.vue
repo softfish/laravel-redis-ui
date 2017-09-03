@@ -54,16 +54,6 @@
     export default {
         data: function() {
             return {
-                filters: {
-                    key: "",
-                        content: ""
-                },
-                filterPostUrl: "/redis-ui/api/filters",
-                    currentPage: 0,
-                previousPage: 0,
-                nextPage: 1,
-                offset: 20,
-                database: "cache",
                 availableDatabase: [
                     'cache',
                     'default'
@@ -71,18 +61,19 @@
             };
         },
         created: function() {
-            this.searchNow();
+            store.commit('searchNow');
         },
         computed: mapState ({
             rows: state => state.rows,
+            filters: state => state.filters,
         }),
         watch: {
             database: function () {
-                this.filters = {
+                store.commit('SET_FILTERS',{
                     key: "",
                     content: ""
-                };
-                this.searchNow();
+                });
+                store.commit('searchNow');
             }
         },
         methods: {
@@ -91,52 +82,33 @@
                 store.commit('SET_MASK_ON', true);
             },
             resetFilters: function () {
-                this.filters = {
+                store.commit('SET_FILTERS',{
                     key: "",
                     content: ""
-                };
-                this.currentPage = 0;
-                this.previousPage = 0;
-                this.nextPage = 1;
-
-                this.searchNow();
+                });
+                store.commit('SET_CURRENT_PAGE', 0);
+                store.commit('SET_PREVIOUS_PAGE', 0);
+                store.commit('SET_NEXT_PAGE', 1);
+                store.commit('searchNow');
             },
             newSearch: function() {
-                this.currentPage = 0;
-                this.previousPage = 0;
-                this.nextPage = 1;
-                this.searchNow();
-            },
-            searchNow: function() {
-                axios.post(this.filterPostUrl, {
-                    'filters': this.filters,
-                    'currentPage': this.currentPage,
-                    'previsouPage': this.previsouPage,
-                    'nextPage': this.nextPage,
-                    'offset': this.offset,
-                    'database': this.database,
-                })
-                .then( (response) => {
-                    response = response.data;
-                    if (response.success) {
-                        store.commit('SET_RESULT_ROWS', response.data);
-                    } else {
-                        this.rows = [];
-                    }
-                });
+                store.commit('SET_CURRENT_PAGE', 0);
+                store.commit('SET_PREVIOUS_PAGE', 0);
+                store.commit('SET_NEXT_PAGE', 1);
+                store.commit('searchNow');
             },
             goNext: function() {
-                if (this.rows.length <= this.offset) {
-                    this.currentPage ++;
-                    this.nextPage ++;
-                    this.searchNow();
+                if (store.getters.GET_RESULT_ROWS().length <= this.offset) {
+                    store.commit('incrementCurrentPage');
+                    store.commit('incrementNextPage');
+                    store.commit('searchNow');
                 }
             },
             goBack:function() {
                 if (this.currentPage > 0) {
-                    this.currentPage --;
-                    this.nextPage --;
-                    this.searchNow();
+                    store.commit('subtractiveCurrentPage');
+                    store.commit('subtractiveNextPage');
+                    store.commit('searchNow');
                 }
             },
         }

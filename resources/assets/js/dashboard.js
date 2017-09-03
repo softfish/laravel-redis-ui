@@ -1,20 +1,36 @@
 /**
  * Created by feikwok on 1/9/17.
  */
-import store from './redis-ui/store'
+import store from './store'
 
-var messageBox = require('./components/redis-ui/MessageBoxTemplate.vue');
-var createForm = require('./components/redis-ui/CreateFormTemplate.vue');
-var editForm = require('./components/redis-ui/EditFormTemplate.vue');
-var filtersPanel = require('./components/redis-ui/FilterPanelTemplate.vue');
+import MessageBox from '../components/redis-ui/MessageBoxTemplate.vue'
+import CreateForm from '../components/redis-ui/CreateFormTemplate.vue'
+import EditForm from '../components/redis-ui/EditFormTemplate.vue'
+import FiltersPanel from '../components/redis-ui/FilterPanelTemplate.vue'
+
+import { mapState } from 'vuex'
 
 new Vue({
     el: '#dashboard',
     store,
     components: {
-        messageBox,
-        createForm,
-        editForm,
-        filtersPanel,
-    }
+        'message-box': MessageBox,
+        'create-form': CreateForm,
+        'edit-form': EditForm,
+        'filters-panel': FiltersPanel,
+    },
+    computed: mapState({
+        maskon: state => state.maskon,
+        rows: state => state.rows,
+        currentAction: state => state.currentAction,
+        actionMessage: state => state.actionMessage,
+    }),
+    methods: {
+        updateConfirm: function(key, content) {
+            store.commit('updateConfirm', { k: key, c: content});
+        },
+        deleteConfirm: function(key) {
+            store.commit('deleteConfirm', key);
+        }
+    },
 })

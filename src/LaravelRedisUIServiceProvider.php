@@ -32,10 +32,6 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
     public function register()
     {
         include __DIR__.'/routes.php';
-//        $this->app->bind('Feikwok\RedisUI\Http\Controllers\UIController', function() {
-//            return UIController::class;
-//        });
-//        $this->app->make('Feikwok\RedisUI\Http\Controller\UIController');
     }
 
     /**
@@ -53,9 +49,9 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
      */
     public function defineAssetPublishing()
     {
-//        $this->publishes([
-//            PACKAGE_PATH.'/public' => public_path('vendor/feikwok/redis-ui/resources/assets'),
-//        ], 'assets/redis-ui');
+       $this->publishes([
+           PACKAGE_PATH.'/public' => public_path('vendor/feikwok/redis-ui'),
+       ]);
 
     }
 

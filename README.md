@@ -30,7 +30,7 @@ Current Stable verison is v1.0.
 TBA
 
 # On Going Developments
-- Organise the vuejs structure with Vuex and components, instead of put everything in one page
+- ~~Organise the vuejs structure with Vuex and components, instead of put everything in one page~~
 - Adding number of results/ offset display per-page options to page
 - Research a way to properly display JSON data
 - Auto load the available redis databases/ connections from Laravel config.

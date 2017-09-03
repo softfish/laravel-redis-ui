@@ -4,18 +4,20 @@
             <div class="panel-heading">Edit Redis Data</div>
             <div class="panel-body">
                 <table class="table">
-                    <tr>
-                        <td>Key</td>
-                        <td>
-                            <input class="form-control" v-model="editForm.keyname" readonly>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content</td>
-                        <td>
-                            <textarea class="form-control" v-model="editForm.content"></textarea>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>Key</td>
+                            <td>
+                                <input class="form-control" v-model="editForm.keyname" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Content</td>
+                            <td>
+                                <textarea class="form-control" v-model="editForm.content"></textarea>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div class="panel-footer">

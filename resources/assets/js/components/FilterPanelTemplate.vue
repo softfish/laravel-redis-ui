@@ -4,9 +4,11 @@
             <h5 class="pull-left col-sm-10"><i class="fa fa-filter" aria-hidden="true"></i> Redis Content Filter</h5>
             <div class="pull-right col-sm-2 input-group">
                 <span class="input-group-addon"><i class="fa fa-database" aria-hidden="true"></i> Database</span>
-                <select v-model="database">
-                    <option v-for="connection in availableDatabase">{{ connection }}</option>
-                </select>
+                <div class="input">
+                    <select class="form-control" v-model="database">
+                        <option v-for="connection in availableDatabase">{{ connection }}</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="panel-body">

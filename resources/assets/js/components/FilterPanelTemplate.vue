@@ -4,9 +4,11 @@
             <h5 class="pull-left col-sm-10"><i class="fa fa-filter" aria-hidden="true"></i> Redis Content Filter</h5>
             <div class="pull-right col-sm-2 input-group">
                 <span class="input-group-addon"><i class="fa fa-database" aria-hidden="true"></i> Database</span>
-                <select v-model="database">
-                    <option v-for="connection in availableDatabase">@{{ connection }}</option>
-                </select>
+                <div class="input">
+                    <select class="form-control" v-model="database">
+                        <option v-for="connection in availableDatabase">{{ connection }}</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="panel-body">
@@ -29,7 +31,7 @@
                     <button class="btn btn-default" v-on:click="goBack()" :disabled="currentPage === 0">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
                     </button>
-                    <div class="btn">Page @{{ currentPage + 1 }}</div>
+                    <div class="btn">Page {{ currentPage + 1 }}</div>
                     <button class="btn btn-default" v-on:click="goNext()" :disabled="rows.length < offset">
                         Next Page <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
@@ -48,82 +50,69 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    import store from '../../redis-ui/store'
+
     export default {
-        data: {
-            filters: {
-                key: "",
-                content: ""
+        data: function() {
+            return {
+                availableDatabase: [
+                    'cache',
+                    'default'
+                ],
+            };
+        },
+        created: function() {
+            store.commit('searchNow');
+        },
+        computed: mapState ({
+            rows: state => state.rows,
+            filters: state => state.filters,
+        }),
+        watch: {
+            database: function () {
+                store.commit('SET_FILTERS',{
+                    key: "",
+                    content: ""
+                });
+                store.commit('searchNow');
+            }
+        },
+        methods: {
+            showCreateForm: function(){
+                store.commit('SET_CURRENT_ACTION', 'create');
+                store.commit('SET_MASK_ON', true);
             },
-            filterPostUrl: "{{ url('redis-ui/api/filters') }}",
-            currentPage: 0,
-            previousPage: 0,
-            nextPage: 1,
-            offset: 20,
-            database: "cache",
-            availableDatabase: [
-                'cache',
-                'default'
-            ],
-            watch: {
-                database: function () {
-                    this.filters = {
-                        key: "",
-                        content: ""
-                    };
-                    this.searchNow();
+            resetFilters: function () {
+                store.commit('SET_FILTERS',{
+                    key: "",
+                    content: ""
+                });
+                store.commit('SET_CURRENT_PAGE', 0);
+                store.commit('SET_PREVIOUS_PAGE', 0);
+                store.commit('SET_NEXT_PAGE', 1);
+                store.commit('searchNow');
+            },
+            newSearch: function() {
+                store.commit('SET_CURRENT_PAGE', 0);
+                store.commit('SET_PREVIOUS_PAGE', 0);
+                store.commit('SET_NEXT_PAGE', 1);
+                store.commit('searchNow');
+            },
+            goNext: function() {
+                if (store.getters.GET_RESULT_ROWS().length <= this.offset) {
+                    store.commit('incrementCurrentPage');
+                    store.commit('incrementNextPage');
+                    store.commit('searchNow');
                 }
             },
-            methods: {
-                resetFilters: function () {
-                    this.filters = {
-                        key: "",
-                        content: ""
-                    };
-                    this.currentPage = 0;
-                    this.previousPage = 0;
-                    this.nextPage = 1;
-
-                    this.searchNow();
-                },
-                newSearch: function() {
-                    this.currentPage = 0;
-                    this.previousPage = 0;
-                    this.nextPage = 1;
-                    this.searchNow();
-                },
-                searchNow: function() {
-                    axios.post(this.filterPostUrl, {
-                        'filters': this.filters,
-                        'currentPage': this.currentPage,
-                        'previsouPage': this.previsouPage,
-                        'nextPage': this.nextPage,
-                        'offset': this.offset,
-                        'database': this.database,
-                    })
-                    .then( (response) => {
-                        response = response.data;
-                        if (response.success) {
-                            this.rows = response.data;
-                        } else {
-                            this.rows = [];
-                        }
-                    });
-                },
-                goNext: function() {
-                    if (this.rows.length <= this.offset) {
-                        this.currentPage ++;
-                        this.nextPage ++;
-                        this.searchNow();
-                    }
-                },
-                goBack:function() {
-                    if (this.currentPage > 0) {
-                        this.currentPage --;
-                        this.nextPage --;
-                        this.searchNow();
-                    }
-                },
-            }
+            goBack:function() {
+                if (this.currentPage > 0) {
+                    store.commit('subtractiveCurrentPage');
+                    store.commit('subtractiveNextPage');
+                    store.commit('searchNow');
+                }
+            },
         }
     }
 </script>

@@ -4,10 +4,10 @@
     <div id="dashboard">
 <div id="hover-mask" v-if="maskon"></div>
 
-    <messageBox></messageBox>
-    <createForm></createForm>
-    <editForm></editForm>
-    <filtersPanel></filtersPanel>
+    <message-box v-if="(maskon && actionMessage != null)"></message-box>
+    <create-form v-if="(maskon && currentAction === 'create')"></create-form>
+    <edit-form v-if="(maskon && currentAction === 'edit')"></edit-form>
+    <filters-panel></filters-panel>
 
 
         <div class="table-wrapper">
@@ -28,7 +28,7 @@
                         <td>@{{ row.content }}</td>
                         <td class="col-sm-2 text-center">
                             <div class="btn-group btn-group-sm">
-                                <button class="btn btn-warning" v-on:click="updateConfim(row.key, row.content)">Edit</button>
+                                <button class="btn btn-warning" v-on:click="updateConfirm(row.key, row.content)">Edit</button>
                                 <button class="btn btn-danger" v-on:click="deleteConfirm(row.key)">Delete</button>
                             </div>
                         </td>
@@ -47,48 +47,5 @@
 @endsection
 
 @section('footer-script')
-    <script>
-        var app = new Vue({
-            el: "#dashboard",
-            data: {
-                deletePostUrl: "{{ url('redis-ui/api/delete/') }}",
-                actionMessage: null,
-                maskon: false,
-            },
-            created: function(){
-                this.searchNow();
-            },
-            methods: {
-                deleteConfirm: function(keyname) {
-                    this.messageType = 'confirming';
-                    this.actionMessage = 'Are you sure you want to remove '+keyname+'?';
-                    this.maskon = true;
-                    this.currentAction = 'delete';
-                    this.targetKeyname = keyname;
-                },
-                deleteRecord: function(keyname) {
-                    axios.post(this.deletePostUrl, {
-                        keyname: keyname
-                    }).then((response) => {
-                        if (response.data.success) {
-                            this.messageType = 'success';
-                            this.actionMessage = 'Key ('+keyname+') has been removed successfully.';
-                            this.maskon = true;
-                            this.searchNow();
-                        } else {
-                            this.messageType = 'error';
-                            this.actionMessage ='Failed to remove key ('+keyname+')';
-                            this.maskon = true;
-                        }
-                    });
-                },
-                closePopUpBox: function() {
-                    this.maskon = false;
-                    this.currentAction = null;
-                    this.actionMessage = null;
-                    this.targetKeyname = null;
-                }
-            }
-        });
-    </script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 @endsection

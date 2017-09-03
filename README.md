@@ -25,6 +25,8 @@ This package will provide an interface for user to management the redis database
 - Laravel 5.3+
 
 # Installation
+Current Stable verison is v1.0.
+
 TBA
 
 # On Going Developments

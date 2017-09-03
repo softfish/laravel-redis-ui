@@ -166,7 +166,7 @@
 @section('header-scripts')
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <link href="{{ asset('css/redis-ui-dashboard.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/redis-ui/dashboard.css') }}" rel="stylesheet"/>
 @endsection
 
 @section('footer-script')

@@ -20,7 +20,7 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
         }
 
         $this->registerResources();
-        $this->registerRoutes();
+        // $this->registerRoutes();
         $this->defineAssetPublishing();
     }
 
@@ -55,19 +55,19 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
 
     }
 
-    /**
-     * Register the Horizon routes.
-     *
-     * @return void
-     */
-    protected function registerRoutes()
-    {
-        Route::group([
-            'prefix' => 'redis-ui',
-//            'namespace' => 'Feikwok\RedisUI\Http\Controller',
-            'middleware' => 'web',
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
-    }
+    // /**
+    //  * Register the Horizon routes.
+    //  *
+    //  * @return void
+    //  */
+    // protected function registerRoutes()
+    // {
+    //     Route::group([
+    //         'prefix' => 'redis-ui',
+    //         'namespace' => 'Feikwok\RedisUI\Http\Controller',
+    //         'middleware' => 'web',
+    //     ], function () {
+    //         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+    //     });
+    // }
 }

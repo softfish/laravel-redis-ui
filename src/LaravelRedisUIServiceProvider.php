@@ -49,9 +49,11 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
      */
     public function defineAssetPublishing()
     {
-       $this->publishes([
-           PACKAGE_PATH.'/public' => public_path('vendor/feikwok/redis-ui'),
-       ]);
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                PACKAGE_PATH.'/resources/public' => public_path('vendor/feikwok/laravel-redis-ui'),
+            ], 'laravel-redis-ui');
+        }
 
     }
 

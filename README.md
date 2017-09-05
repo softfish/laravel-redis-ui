@@ -34,7 +34,7 @@ TBA
 - Adding number of results/ offset display per-page options to page
 - Research a way to properly display JSON data
 - Auto load the available redis databases/ connections from Laravel config.
-- Refactoring the boots and register in Package Service Provider
+- ~~Refactoring the boots and register in Package Service Provider~~
 
 # Sandbox/ Demo
 TBA

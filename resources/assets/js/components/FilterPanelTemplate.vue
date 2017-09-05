@@ -56,13 +56,12 @@
     export default {
         data: function() {
             return {
-                availableDatabase: [
-                    'cache',
-                    'default'
-                ],
+                availableDatabase: [],
+                getDBUrl: '/redis-ui/api/get-db',
             };
         },
         created: function() {
+            this.getDB();
             store.commit('searchNow');
         },
         computed: mapState ({
@@ -113,6 +112,15 @@
                     store.commit('searchNow');
                 }
             },
+            getDB: function() {
+                axios.get(this.getDBUrl)
+                .then( (response) => {
+                    response = response.data;
+                    if (response.success) {
+                        this.availableDatabase = response.databases;
+                    }
+                });
+            }
         }
     }
 </script>

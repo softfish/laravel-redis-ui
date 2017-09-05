@@ -23,13 +23,31 @@ This package will provide an interface for user to management the redis database
 - PHP 7.0+
 - Redis Server, which configured in you laravel application
 - Laravel 5.3+
+- Vuejs 2.0+
+- Vuex 2.o+
 
 # Installation
-Current Stable verison is **v1.0.1**
+Current Stable verison is **v1.1.1**
+
+**First we need to install Vuex**
+
+Vuejs CDN has been included to the default template. But Vuex are not. So you might want to install Vuex first on your machine.
+
+```
+npm install vuex --save
+```
+
+Or otherwise, you can modify the default template to include the CDN for Vuex.
+
+```
+<script src="/path/to/vuex.js"></script>
+or
+<script src="/path/to/vuex.js@2.0.0"></script>
+```
 
 **Add and install the package with the follow command to your laravel application**
 ```
-composer require feikwok/laravel-redis-ui v1.0.1
+composer require feikwok/laravel-redis-ui v1.1.1
 ```
 **Update the config/app.php file to include the following line in 'providers' section**
 ```

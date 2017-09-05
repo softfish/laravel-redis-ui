@@ -28,11 +28,17 @@
         <div class="panel-footer">
             <div class="col-sm-12">
                 <div class="page-control col-sm-6 pull-left">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Offset:</span>
+                            <input class="form-control" v-model="offset">
+                        </div>
+                    </div>
                     <button class="btn btn-default" v-on:click="goBack()" :disabled="currentPage === 0">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
                     </button>
                     <div class="btn">Page {{ currentPage + 1 }}</div>
-                    <button class="btn btn-default" v-on:click="goNext()" :disabled="rows.length < offset">
+                    <button class="btn btn-default" v-on:click="goNext()" :disabled="!hasNextPage()">
                         Next Page <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -58,6 +64,8 @@
             return {
                 availableDatabase: [],
                 getDBUrl: '/redis-ui/api/get-db',
+                database: '',
+                offset: 20,
             };
         },
         created: function() {
@@ -70,13 +78,17 @@
             currentPage: state => state.currentPage,
         }),
         watch: {
-            database: function () {
+            database: function (value) {
                 store.commit('SET_FILTERS',{
                     key: "",
                     content: ""
                 });
+                store.commit('SET_DATABASE', value);
                 store.commit('searchNow');
-            }
+            },
+            offset: function(value) {
+                store.commit('SET_OFFSET', parseInt(value));
+            },
         },
         methods: {
             showCreateForm: function(){
@@ -121,7 +133,14 @@
                         this.availableDatabase = response.databases;
                     }
                 });
-            }
+            },
+            hasNextPage: function() {
+                if (store.getters.GET_RESULT_ROWS.length < store.getters.GET_OFFSET) {
+                    return false;
+                } else {
+                    return true;
+                }
+            },
         }
     }
 </script>

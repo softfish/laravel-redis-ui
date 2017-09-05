@@ -28,8 +28,6 @@
 
 <div class="col-sm-12 page">
 
-@include('flash::message')
-
     <div class="content">
         @yield('content')
     </div>

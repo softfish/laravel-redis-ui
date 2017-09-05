@@ -25,16 +25,28 @@ This package will provide an interface for user to management the redis database
 - Laravel 5.3+
 
 # Installation
-Current Stable verison is v1.0.1
+Current Stable verison is **v1.0.1**
 
-TBA
+**Add and install the package with the follow command to your laravel application**
+```
+composer require feikwok/laravel-redis-ui v1.0.1
+```
+**Update the config/app.php file to include the following line in 'providers' section**
+```
+Feikwok\RedisUI\LaravelRedisUIServiceProvider::class,
+```
+**At last make sure you publish the resources to your public folder**
+```
+php artisan vendor:publish
+```
+Thats should be all. Happy coding!
 
 # On Going Developments
 - ~~Organise the vuejs structure with Vuex and components, instead of put everything in one page~~
 - Adding number of results/ offset display per-page options to page
 - Research a way to properly display JSON data
 - Auto load the available redis databases/ connections from Laravel config.
-- Refactoring the boots and register in Package Service Provider
+- ~~Refactoring the boots and register in Package Service Provider~~
 
 # Sandbox/ Demo
 TBA

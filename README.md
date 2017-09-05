@@ -31,6 +31,15 @@ Current Stable verison is **v1.0.1**
 ```
 composer require feikwok/laravel-redis-ui v1.0.1
 ```
+**Update the config/app.php file to include the following line in 'providers' section**
+```
+Feikwok\RedisUI\LaravelRedisUIServiceProvider::class,
+```
+**At last make sure you publish the resources to your public folder**
+```
+php artisan vendor:publish
+```
+Thats should be all. Happy coding!
 
 # On Going Developments
 - ~~Organise the vuejs structure with Vuex and components, instead of put everything in one page~~

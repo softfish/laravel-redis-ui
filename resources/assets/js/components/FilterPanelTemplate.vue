@@ -56,18 +56,18 @@
     export default {
         data: function() {
             return {
-                availableDatabase: [
-                    'cache',
-                    'default'
-                ],
+                availableDatabase: [],
+                getDBUrl: '/redis-ui/api/get-db',
             };
         },
         created: function() {
+            this.getDB();
             store.commit('searchNow');
         },
         computed: mapState ({
             rows: state => state.rows,
             filters: state => state.filters,
+            currentPage: state => state.currentPage,
         }),
         watch: {
             database: function () {
@@ -100,7 +100,7 @@
                 store.commit('searchNow');
             },
             goNext: function() {
-                if (store.getters.GET_RESULT_ROWS().length <= this.offset) {
+                if (store.getters.GET_RESULT_ROWS.length <= store.getters.GET_OFFSET) {
                     store.commit('incrementCurrentPage');
                     store.commit('incrementNextPage');
                     store.commit('searchNow');
@@ -113,6 +113,15 @@
                     store.commit('searchNow');
                 }
             },
+            getDB: function() {
+                axios.get(this.getDBUrl)
+                .then( (response) => {
+                    response = response.data;
+                    if (response.success) {
+                        this.availableDatabase = response.databases;
+                    }
+                });
+            }
         }
     }
 </script>

@@ -12,8 +12,7 @@
 		"illuminate/console" : "5.3.* || 5.4.* || 5.5.*",
 		"illuminate/database" : "5.3.* || 5.4.* || 5.5.*",
 		"illuminate/filesystem" : "5.3.* || 5.4.* || 5.5.*",
-		"predis/predis" : "^1.0",
-		"laracasts/flash" : "~1.3"
+		"predis/predis" : "^1.0"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^4.0",

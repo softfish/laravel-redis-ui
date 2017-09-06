@@ -28,11 +28,17 @@
         <div class="panel-footer">
             <div class="col-sm-12">
                 <div class="page-control col-sm-6 pull-left">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Offset:</span>
+                            <input class="form-control" v-model="offset">
+                        </div>
+                    </div>
                     <button class="btn btn-default" v-on:click="goBack()" :disabled="currentPage === 0">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
                     </button>
                     <div class="btn">Page {{ currentPage + 1 }}</div>
-                    <button class="btn btn-default" v-on:click="goNext()" :disabled="rows.length < offset">
+                    <button class="btn btn-default" v-on:click="goNext()" :disabled="!hasNextPage()">
                         Next Page <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -56,27 +62,33 @@
     export default {
         data: function() {
             return {
-                availableDatabase: [
-                    'cache',
-                    'default'
-                ],
+                availableDatabase: [],
+                getDBUrl: '/redis-ui/api/get-db',
+                database: '',
+                offset: 20,
             };
         },
         created: function() {
+            this.getDB();
             store.commit('searchNow');
         },
         computed: mapState ({
             rows: state => state.rows,
             filters: state => state.filters,
+            currentPage: state => state.currentPage,
         }),
         watch: {
-            database: function () {
+            database: function (value) {
                 store.commit('SET_FILTERS',{
                     key: "",
                     content: ""
                 });
+                store.commit('SET_DATABASE', value);
                 store.commit('searchNow');
-            }
+            },
+            offset: function(value) {
+                store.commit('SET_OFFSET', parseInt(value));
+            },
         },
         methods: {
             showCreateForm: function(){
@@ -100,7 +112,7 @@
                 store.commit('searchNow');
             },
             goNext: function() {
-                if (store.getters.GET_RESULT_ROWS().length <= this.offset) {
+                if (store.getters.GET_RESULT_ROWS.length <= store.getters.GET_OFFSET) {
                     store.commit('incrementCurrentPage');
                     store.commit('incrementNextPage');
                     store.commit('searchNow');
@@ -111,6 +123,22 @@
                     store.commit('subtractiveCurrentPage');
                     store.commit('subtractiveNextPage');
                     store.commit('searchNow');
+                }
+            },
+            getDB: function() {
+                axios.get(this.getDBUrl)
+                .then( (response) => {
+                    response = response.data;
+                    if (response.success) {
+                        this.availableDatabase = response.databases;
+                    }
+                });
+            },
+            hasNextPage: function() {
+                if (store.getters.GET_RESULT_ROWS.length < store.getters.GET_OFFSET) {
+                    return false;
+                } else {
+                    return true;
                 }
             },
         }

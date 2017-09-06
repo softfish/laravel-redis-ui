@@ -8,5 +8,6 @@ Route::group(['prefix' => 'redis-ui'], function(){
         Route::post('delete', '\Feikwok\RedisUI\Http\Controllers\API\RedisFilterController@delete');
         Route::post('create', '\Feikwok\RedisUI\Http\Controllers\API\RedisFilterController@add');
         Route::post('edit', '\Feikwok\RedisUI\Http\Controllers\API\RedisFilterController@update');
+        Route::get('get-db', '\Feikwok\RedisUI\Http\Controllers\API\DefaultController@getAvailableDatabase');
     });
 });

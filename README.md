@@ -1,6 +1,6 @@
-<p align="right">
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+[![Latest Stable Version](https://poser.pugx.org/feikwok/laravel-redis-ui/v/stable)](https://packagist.org/packages/feikwok/laravel-redis-ui)
+[![Total Downloads](https://poser.pugx.org/feikwok/laravel-redis-ui/downloads)](https://packagist.org/packages/feikwok/laravel-redis-ui)
+[![License](https://poser.pugx.org/feikwok/laravel-redis-ui/license)](https://packagist.org/packages/feikwok/laravel-redis-ui)
 
 # laravel-redis-ui
 Redis UI for Laravel
@@ -14,9 +14,9 @@ This package will provide an interface for user to management the redis database
   - Key
   - Content/ Value
 - Reset filter
-- Pagination on results (by default it is 20 - going to make is selectable)
+- Pagination on results
 - Create a new record (key + content)
-- Eidt an existing record (content only)
+- Edit an existing record (content only)
 - Delete an existing record
 
 # Requirement
@@ -27,7 +27,6 @@ This package will provide an interface for user to management the redis database
 - Vuex 2.o+
 
 # Installation
-Current Stable verison is **v1.1.1**
 
 **First we need to install Vuex**
 
@@ -47,7 +46,7 @@ or
 
 **Add and install the package with the follow command to your laravel application**
 ```
-composer require feikwok/laravel-redis-ui v1.1.1
+composer require feikwok/laravel-redis-ui
 ```
 **Update the config/app.php file to include the following line in 'providers' section**
 ```

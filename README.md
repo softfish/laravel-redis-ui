@@ -24,7 +24,7 @@ This package will provide an interface for user to management the redis database
 - Redis Server, which configured in you laravel application
 - Laravel 5.3+
 - Vuejs 2.0+
-- Vuex 2.o+
+- Vuex 2.0+
 
 # Installation
 Current Stable verison is **v1.1.1**

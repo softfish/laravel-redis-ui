@@ -44,7 +44,8 @@
         methods: {
             deleteRecord: function(keyname) {
                 axios.post(this.deletePostUrl, {
-                    keyname: keyname
+                    keyname: keyname,
+                    database: store.getters.GET_DATABASE,
                 }).then((response) => {
                     if (response.data.success) {
                         store.commit('SET_MESSAGE_TYPE', 'success');

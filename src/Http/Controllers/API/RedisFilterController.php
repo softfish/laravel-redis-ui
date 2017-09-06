@@ -68,6 +68,10 @@ class RedisFilterController extends Controller {
 
                             $counter --;
                         }
+                    } else if ($counter === 0 ){
+                        // Since we got enough results to print from the specific page offset
+                        // we can break it out from the foreach loop now.
+                        break;
                     }
                 }
 
@@ -84,11 +88,16 @@ class RedisFilterController extends Controller {
         }
     }
 
+    /**
+     * Adding a new key to the given redis database connection
+     * @param Request $request
+     * @return mixed
+     */
     public function add(Request $request)
     {
         // 1. check the key is existed
-        if ($request->has('keyname')) {
-            $redis = Redis::connection('cache');
+        if ($request->has('keyname') && $request->has('database')) {
+            $redis = Redis::connection($request->get('database'));
             $existingContent = $redis->get($request->get('keyname'));
             if (empty($existingContent)) {
                 $redis->set($request->get('keyname'), $request->get('content'));
@@ -107,11 +116,17 @@ class RedisFilterController extends Controller {
         }
     }
 
+    /**
+     * API update function for an existing key in the given database
+     * connection.
+     * @param Request $request
+     * @return mixed
+     */
     public function update(Request $request)
     {
         // 1. check the key is existed
-        if ($request->has('keyname')) {
-            $redis = Redis::connection('cache');
+        if ($request->has('keyname') && $request->has('database')) {
+            $redis = Redis::connection($request->get('database'));
             $existingContent = $redis->get($request->get('keyname'));
 
             if (!empty($existingContent)) {
@@ -132,10 +147,16 @@ class RedisFilterController extends Controller {
         }
     }
 
+    /**
+     * API function to remove an existing key and its content from the given
+     * redis database connection.
+     * @param Request $request
+     * @return mixed
+     */
     public function delete(Request $request)
     {
-        if ($request->has('keyname')) {
-            $redis = Redis::connection('cache');
+        if ($request->has('keyname') && $request->has('database')) {
+            $redis = Redis::connection($request->get('database'));
             $redis->del($request->get('keyname'));
 
             return Response::json([

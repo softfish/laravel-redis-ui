@@ -26,7 +26,7 @@ const store = new Vuex.Store({
         previousPage: 0,
         nextPage: 1,
         offset: 20,
-        database: "cache",
+        database: null,
     },
     action: {
 

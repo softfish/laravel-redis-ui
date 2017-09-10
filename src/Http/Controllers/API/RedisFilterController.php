@@ -53,25 +53,30 @@ class RedisFilterController extends Controller {
                 // 2. load the keys to the response data.
                 $offset = $request->get('offset');
                 $currentPage = $request->get('currentPage');
-//                $nextPage = $request->get('nextPage');
-                $counter = $offset;
+                $fullyMatchedKeys = [];
 
                 foreach ($keys as $index => $key) {
+                    $content = $redis->get($key);
+                    if (preg_match('/.*' . $searchContent . '.*/i', $content)) {
+                        $fullyMatchedKeys[] = [
+                            'key' => $key,
+                            'content' => $content
+                        ];
+                    }
+                }
+
+                // since we also need to consider the content filter too,
+                // so we will do that offset filter here.
+                $counter = $offset;
+                foreach ($fullyMatchedKeys as $index => $record) {
                     if (($currentPage * $offset) <= $index && $counter != 0) {
-                        $content = $redis->get($key);
-
-                        if (preg_match('/.*' . $searchContent . '.*/i', $content)) {
-                            $data[] = [
-                                'key' => $key,
-                                'content' => $content
-                            ];
-
-                            $counter --;
+                        $data[] = $record;
+                        $counter--;
+                        if ($counter === 0) {
+                            // There is no need to look for more record anymore,
+                            // we have enough to display now.
+                            break;
                         }
-                    } else if ($counter === 0 ){
-                        // Since we got enough results to print from the specific page offset
-                        // we can break it out from the foreach loop now.
-                        break;
                     }
                 }
 

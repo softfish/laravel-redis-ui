@@ -135,7 +135,7 @@
                 });
             },
             hasNextPage: function() {
-                if (store.getters.GET_RESULT_ROWS.length < store.getters.GET_OFFSET) {
+                if (store.getters.GET_RESULT_ROWS.length <= store.getters.GET_OFFSET) {
                     return false;
                 } else {
                     return true;

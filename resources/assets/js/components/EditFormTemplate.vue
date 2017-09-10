@@ -51,7 +51,8 @@
             editRecord: function(keyname, newValue) {
                 axios.post(this.editPostUrl, {
                     keyname: keyname,
-                    content: newValue
+                    content: newValue,
+                    database: store.getters.GET_DATABASE,
                 }).then((response) => {
                     response = response.data;
                     if (response.success) {

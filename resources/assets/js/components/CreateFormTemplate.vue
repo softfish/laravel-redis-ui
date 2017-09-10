@@ -51,7 +51,8 @@
             addRecord: function(keyname, value) {
                 axios.post(this.addPostUrl, {
                     keyname: keyname,
-                    content: value
+                    content: value,
+                    database: store.getters.GET_DATABASE,
                 }).then((response) => {
                     response = response.data;
                     if (response.success) {

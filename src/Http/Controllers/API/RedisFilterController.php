@@ -111,12 +111,14 @@ class RedisFilterController extends Controller {
                 ]);
             } else {
                 return Response::json([
-                    'success' => false
+                    'success' => false,
+                    'message' => 'Key already existed, please use update or create a different key.'
                 ]);
             }
         } else {
             return Response::json([
-                'success' => false
+                'success' => false,
+                'message' => 'Missing mandatory key name and target database.'
             ]);
         }
     }
@@ -142,12 +144,14 @@ class RedisFilterController extends Controller {
                 ]);
             } else {
                 return Response::json([
-                    'success' => false
+                    'success' => false,
+                    'message' => 'Key not found.'
                 ]);
             }
         } else {
             return Response::json([
-                'success' => false
+                'success' => false,
+                'message' => 'Missing mandatory key name and target database.'
             ]);
         }
     }
@@ -169,7 +173,8 @@ class RedisFilterController extends Controller {
             ]);
         } else {
             return Response::json([
-                'success' => false
+                'success' => false,
+                'message' => 'Missing mandatory key name and target database.'
             ]);
         }
     }

@@ -66,4 +66,4 @@ Thats should be all. Happy coding!
 - ~~Refactoring the boots and register in Package Service Provider~~
 
 # Sandbox/ Demo
-TBA
+[laravel-redis-ui Demo](http://opi.ateliersign.com/sandbox/public/redis-ui)

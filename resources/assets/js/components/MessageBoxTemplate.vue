@@ -31,7 +31,7 @@
     export default {
         data: function() {
             return {
-                deletePostUrl: "/redis-ui/api/delete/",
+                deletePostUrl: "/redis-ui/api/delete",
             };
         },
         computed: mapState({
@@ -51,6 +51,7 @@
                         store.commit('SET_MESSAGE_TYPE', 'success');
                         store.commit('SET_ACTION_MESSAGE', 'Key ('+keyname+') has been removed successfully.');
                         store.commit('SET_MASK_ON', true);
+                        store.commit('SET_CURRENT_ACTION', null); // hide the "remove" button.
                         store.commit('searchNow');
                     } else {
                         store.commit('SET_MESSAGE_TYPE', 'error');

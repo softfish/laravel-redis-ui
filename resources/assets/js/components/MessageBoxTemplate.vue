@@ -31,7 +31,7 @@
     export default {
         data: function() {
             return {
-                deletePostUrl: "/redis-ui/api/delete/",
+                deletePostUrl: "/redis-ui/api/delete",
             };
         },
         computed: mapState({

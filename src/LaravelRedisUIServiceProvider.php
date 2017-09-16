@@ -58,7 +58,7 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
     }
 
     // /**
-    //  * Register the Horizon routes.
+    //  * Register package routes.
     //  *
     //  * @return void
     //  */
@@ -66,7 +66,7 @@ class LaravelRedisUIServiceProvider extends ServiceProvider
     // {
     //     Route::group([
     //         'prefix' => 'redis-ui',
-    //         'namespace' => 'Feikwok\RedisUI\Http\Controller',
+    //         'namespace' => 'Feikwok\RedisUI\Http\Controllers',
     //         'middleware' => 'web',
     //     ], function () {
     //         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');

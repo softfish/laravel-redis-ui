@@ -80,9 +80,13 @@ class RedisFilterController extends Controller {
                     }
                 }
 
+                $hasNextPage = ((count($fullyMatchedKeys)/$offset) > ($currentPage +1))? true : false;
+
                 return Response::json([
                     'success' => true,
-                    'data' => $data
+                    'data' => $data,
+                    'totalPage' => count($fullyMatchedKeys) / $offset,
+                    'hasNextPage' => $hasNextPage
                 ]);
             } else {
                 return Response::json([

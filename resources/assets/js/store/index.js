@@ -27,6 +27,7 @@ const store = new Vuex.Store({
         nextPage: 1,
         offset: 20,
         database: null,
+        hasNextPage: false,
     },
     action: {
 
@@ -74,6 +75,9 @@ const store = new Vuex.Store({
         SET_DATABASE: (state, value) => {
             state.database = value;
         },
+        SET_HAS_NEXT_PAGE: (state, value) => {
+            state.hasNextPage = value;
+        },
         closePopUpBox: (state) => {
             state.maskon = false;
             state.currentAction = null;
@@ -93,6 +97,7 @@ const store = new Vuex.Store({
                     response = response.data;
                     if (response.success) {
                         store.commit('SET_RESULT_ROWS', response.data);
+                        store.commit('SET_HAS_NEXT_PAGE', response.hasNextPage);
                     } else {
                         this.rows = [];
                     }
@@ -162,6 +167,9 @@ const store = new Vuex.Store({
         },
         GET_NEXT_PAGE: state => {
             return state.nextPage;
+        },
+        GET_HAS_NEXT_PAGE: state => {
+            return state.hasNextPage;
         },
         GET_OFFSET: state => {
             return state.offset;

@@ -38,7 +38,7 @@
                         <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
                     </button>
                     <div class="btn">Page {{ currentPage + 1 }}</div>
-                    <button class="btn btn-default" v-on:click="goNext()" :disabled="!hasNextPage()">
+                    <button class="btn btn-default" v-on:click="goNext()" :disabled="!hasNextPage">
                         Next Page <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -57,7 +57,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import store from '../../redis-ui/store'
+    import store from '../store'
 
     export default {
         data: function() {
@@ -76,6 +76,7 @@
             rows: state => state.rows,
             filters: state => state.filters,
             currentPage: state => state.currentPage,
+            hasNextPage: state => state.hasNextPage,
         }),
         watch: {
             database: function (value) {
@@ -133,13 +134,6 @@
                         this.availableDatabase = response.databases;
                     }
                 });
-            },
-            hasNextPage: function() {
-                if (store.getters.GET_RESULT_ROWS.length <= store.getters.GET_OFFSET) {
-                    return false;
-                } else {
-                    return true;
-                }
             },
         }
     }

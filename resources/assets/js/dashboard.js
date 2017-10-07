@@ -3,10 +3,10 @@
  */
 import store from './store'
 
-import MessageBox from '../components/redis-ui/MessageBoxTemplate.vue'
-import CreateForm from '../components/redis-ui/CreateFormTemplate.vue'
-import EditForm from '../components/redis-ui/EditFormTemplate.vue'
-import FiltersPanel from '../components/redis-ui/FilterPanelTemplate.vue'
+import MessageBox from './components/MessageBoxTemplate.vue'
+import CreateForm from './components/CreateFormTemplate.vue'
+import EditForm from './components/EditFormTemplate.vue'
+import FiltersPanel from './components/FilterPanelTemplate.vue'
 
 import { mapState } from 'vuex'
 

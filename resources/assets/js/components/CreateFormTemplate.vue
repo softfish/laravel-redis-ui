@@ -32,7 +32,7 @@
 
 <script>
     import { mapState } from 'vuex'
-    import store from '../../redis-ui/store'
+    import store from '../store'
 
     export default {
         data: function() {

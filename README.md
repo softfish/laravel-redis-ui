@@ -58,12 +58,5 @@ php artisan vendor:publish
 ```
 Thats should be all. Happy coding!
 
-# On Going Developments
-- ~~Organise the vuejs structure with Vuex and components, instead of put everything in one page~~
-- ~~Adding number of results/ offset display per-page options to page~~
-- Research a way to properly display JSON data
-- ~~Auto load the available redis databases/ connections from Laravel config.~~
-- ~~Refactoring the boots and register in Package Service Provider~~
-
 # Sandbox/ Demo
 [laravel-redis-ui Demo](http://opi.ateliersign.com/sandbox/public/redis-ui)

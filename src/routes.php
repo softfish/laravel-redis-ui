@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['prefix' => 'redis-ui'], function(){
-    Route::resource('/', \Feikwok\RedisUI\Http\Controllers\UIController::class);
+    Route::get('/', '\Feikwok\RedisUI\Http\Controllers\UIController@index')->middleware(['web', 'auth']);
 
     Route::group(['prefix' => 'api'], function(){
         Route::post('filters', '\Feikwok\RedisUI\Http\Controllers\API\RedisFilterController@index');

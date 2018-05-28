@@ -47,14 +47,17 @@ body {
     z-index: 6;
     width: 350px;
     left: 50%;
-    margin-left: -175px;
+    margin: auto;
     top: 10%;
   }
   #create-form,
   #message-box {
+    position: fixed;
     z-index: 7;
     width: 400px;
+    left: 50%;
     margin-left: -200px;
+    top: 10%;
   }
   .filters {
     .input-group {
@@ -79,5 +82,15 @@ body {
   }
   .table-wrapper table {
     margin-bottom: 0px;
+    tbody {
+      tr {
+        td {
+          pre {
+            max-height: 200px;
+            overflow-y: scroll;
+          }
+        }
+      }
+    }
   }
 }

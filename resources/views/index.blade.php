@@ -25,7 +25,7 @@
                     </tr>
                     <tr v-for="row in rows">
                         <td class="col-sm-4">@{{ row.key }}</td>
-                        <td>@{{ row.content }}</td>
+                        <td><pre>@{{ row.content }}</pre></td>
                         <td class="col-sm-2 text-center">
                             <div class="btn-group btn-group-sm">
                                 <button class="btn btn-warning" v-on:click="updateConfirm(row.key, row.content)">Edit</button>

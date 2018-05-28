@@ -3,6 +3,7 @@
 namespace Feikwok\RedisUI;
 
 use Feikwok\RedisUI\Http\Controllers\UIController;
+use Feikwok\RedisUI\Middleware\RedisUiAuth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 

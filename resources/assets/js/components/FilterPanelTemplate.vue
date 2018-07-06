@@ -64,7 +64,7 @@
             return {
                 availableDatabase: [],
                 getDBUrl: '/redis-ui/api/get-db',
-                database: '',
+                database: 'default',
                 offset: 20,
             };
         },

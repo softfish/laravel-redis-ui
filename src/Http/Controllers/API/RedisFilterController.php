@@ -19,51 +19,14 @@ class RedisFilterController extends Controller {
             $redis = Redis::connection($request->get('database'));
 
             if (!empty($redis)) {
-
-                $searchKey = "";
-                $searchContent = "";
-                foreach ($filters as $fKey => $fStr) {
-                    switch($fKey) {
-                        case 'key':
-                            if (!empty($fStr)) {
-                                $searchKey = "{$fStr}";
-                            }
-                            break;
-                        case 'content':
-                            if (!empty($fStr)) {
-                                $searchContent = "{$fStr}";
-                            }
-                            break;
-                        default;
-                    }
-                }
-
                 // 1. Firt find the keys matched the filters
-                if (empty($searchKey)) {
-                    $keys = $redis->keys("*");
-                } else {
-                    $keys = $redis->keys('*'.$searchKey.'*');
-                    if (empty($keys)) {
-                        $keys = $redis->keys($searchKey);
-                    }
-                }
-
+                list($keys, $searchContent) = $this->findKeysAndSearchContent($filters, $redis);
                 $data = [];
 
                 // 2. load the keys to the response data.
                 $offset = $request->get('offset');
                 $currentPage = $request->get('currentPage');
-                $fullyMatchedKeys = [];
-
-                foreach ($keys as $index => $key) {
-                    $content = $redis->get($key);
-                    if (preg_match('/.*' . $searchContent . '.*/i', $content)) {
-                        $fullyMatchedKeys[] = [
-                            'key' => $key,
-                            'content' => $content
-                        ];
-                    }
-                }
+                $fullyMatchedKeys = $this->getFullyMatchedKeys($redis, $keys, $searchContent);
 
                 // since we also need to consider the content filter too,
                 // so we will do that offset filter here.
@@ -181,5 +144,84 @@ class RedisFilterController extends Controller {
                 'message' => 'Missing mandatory key name and target database.'
             ]);
         }
+    }
+
+    /**
+     * Get the fully matched key if we have been given searchContent
+     *
+     * @param $redis
+     * @param $keys
+     * @param $searchContent
+     * @return array
+     */
+    protected function getFullyMatchedKeys($redis, $keys, $searchContent)
+    {
+        $fullyMatchedKeys = [];
+
+        foreach ($keys as $index => $key) {
+            $keyType = $redis->type($key)->__toString();
+            switch ($keyType) {
+                case "string":
+                    $content = $redis->get($key);
+                    break;
+                case "list":
+                    $content = substr(json_encode($redis->lrange($key, 0, -1)), 0, 100).'... more';
+                    break;
+                case "zset":
+                    $content = substr(json_encode($redis->zrange($key, 0, -1)), 0, 100).'... more';
+                    break;
+                default:
+                    $content = 'Unhandled Type: '.$keyType;
+            }
+
+            if (preg_match('/.*' . $searchContent . '.*/i', $content)) {
+                $fullyMatchedKeys[] = [
+                    'key' => $key,
+                    'content' => $content
+                ];
+            }
+        }
+
+        return $fullyMatchedKeys;
+    }
+
+    /**
+     * Find the right keys from a given filters
+     *
+     * @param $filters
+     * @param $redis
+     * @return mixed
+     */
+    protected function findKeysAndSearchContent($filters, $redis)
+    {
+        $searchKey = "";
+        $searchContent = "";
+        foreach ($filters as $fKey => $fStr) {
+            switch($fKey) {
+                case 'key':
+                    if (!empty($fStr)) {
+                        $searchKey = "{$fStr}";
+                    }
+                    break;
+                case 'content':
+                    if (!empty($fStr)) {
+                        $searchContent = "{$fStr}";
+                    }
+                    break;
+                default;
+            }
+        }
+
+
+        if (empty($searchKey)) {
+            $keys = $redis->keys("*");
+        } else {
+            $keys = $redis->keys('*'.$searchKey.'*');
+            if (empty($keys)) {
+                $keys = $redis->keys($searchKey);
+            }
+        }
+
+        return [$keys, $searchContent];
     }
 }

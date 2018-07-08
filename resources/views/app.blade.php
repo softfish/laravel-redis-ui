@@ -35,7 +35,6 @@
     <footer class="text-center">
         <div class="pull-right text-right">
             Powered By: VueJs + Laravel + Redis<br>
-            v1.1.4<br>
             By <a href="https://github.com/softfish">softfish</a>
         </div>
     </footer>

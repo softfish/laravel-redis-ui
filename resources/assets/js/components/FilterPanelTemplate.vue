@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <button class="btn btn-default" v-on:click="goBack()" :disabled="currentPage === 0">
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i> Preivous Page
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i> Previous Page
                     </button>
                     <div class="btn">Page {{ currentPage + 1 }}</div>
                     <button class="btn btn-default" v-on:click="goNext()" :disabled="!hasNextPage">

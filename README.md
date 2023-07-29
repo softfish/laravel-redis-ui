@@ -58,5 +58,3 @@ php artisan vendor:publish
 ```
 Thats should be all. Happy coding!
 
-# Sandbox/ Demo
-[laravel-redis-ui Demo](http://opi.ateliersign.com/sandbox/public/redis-ui)
